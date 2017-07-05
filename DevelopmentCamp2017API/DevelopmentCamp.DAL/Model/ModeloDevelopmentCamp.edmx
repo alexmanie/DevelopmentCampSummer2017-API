@@ -1,0 +1,258 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="DevelopmentCampModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Artista">
+          <Key>
+            <PropertyRef Name="IdArtista" />
+          </Key>
+          <Property Name="IdArtista" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" />
+          <Property Name="Apellido_1" Type="varchar" MaxLength="50" />
+          <Property Name="Edad" Type="int" />
+        </EntityType>
+        <EntityType Name="Producto">
+          <Key>
+            <PropertyRef Name="IdProducto" />
+          </Key>
+          <Property Name="IdProducto" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" />
+          <Property Name="IdTipoProducto" Type="int" Nullable="false" />
+          <Property Name="FechaLanzamiento" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ProductoArtista">
+          <Key>
+            <PropertyRef Name="IdProductoArtista" />
+          </Key>
+          <Property Name="IdProductoArtista" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idProducto" Type="int" Nullable="false" />
+          <Property Name="idArtista" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TipoProducto">
+          <Key>
+            <PropertyRef Name="IdTipoProducto" />
+          </Key>
+          <Property Name="IdTipoProducto" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Descripcion" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_Producto_TipoProducto">
+          <End Role="TipoProducto" Type="Self.TipoProducto" Multiplicity="1" />
+          <End Role="Producto" Type="Self.Producto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipoProducto">
+              <PropertyRef Name="IdTipoProducto" />
+            </Principal>
+            <Dependent Role="Producto">
+              <PropertyRef Name="IdTipoProducto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductoArtista_Artista">
+          <End Role="Artista" Type="Self.Artista" Multiplicity="1" />
+          <End Role="ProductoArtista" Type="Self.ProductoArtista" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Artista">
+              <PropertyRef Name="IdArtista" />
+            </Principal>
+            <Dependent Role="ProductoArtista">
+              <PropertyRef Name="idArtista" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductoArtista_Producto">
+          <End Role="Producto" Type="Self.Producto" Multiplicity="1" />
+          <End Role="ProductoArtista" Type="Self.ProductoArtista" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Producto">
+              <PropertyRef Name="IdProducto" />
+            </Principal>
+            <Dependent Role="ProductoArtista">
+              <PropertyRef Name="idProducto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DevelopmentCampModelStoreContainer">
+          <EntitySet Name="Artista" EntityType="Self.Artista" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Producto" EntityType="Self.Producto" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductoArtista" EntityType="Self.ProductoArtista" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TipoProducto" EntityType="Self.TipoProducto" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Producto_TipoProducto" Association="Self.FK_Producto_TipoProducto">
+            <End Role="TipoProducto" EntitySet="TipoProducto" />
+            <End Role="Producto" EntitySet="Producto" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductoArtista_Artista" Association="Self.FK_ProductoArtista_Artista">
+            <End Role="Artista" EntitySet="Artista" />
+            <End Role="ProductoArtista" EntitySet="ProductoArtista" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductoArtista_Producto" Association="Self.FK_ProductoArtista_Producto">
+            <End Role="Producto" EntitySet="Producto" />
+            <End Role="ProductoArtista" EntitySet="ProductoArtista" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DevelopmentCampModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Artista">
+          <Key>
+            <PropertyRef Name="IdArtista" />
+          </Key>
+          <Property Name="IdArtista" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Apellido_1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Edad" Type="Int32" />
+          <NavigationProperty Name="ProductoArtistas" Relationship="DevelopmentCampModel.FK_ProductoArtista_Artista" FromRole="Artista" ToRole="ProductoArtista" />
+        </EntityType>
+        <EntityContainer Name="DevelopmentCampEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Artistas" EntityType="Self.Artista" />
+          <EntitySet Name="Productoes" EntityType="DevelopmentCampModel.Producto" />
+          <EntitySet Name="ProductoArtistas" EntityType="DevelopmentCampModel.ProductoArtista" />
+          <EntitySet Name="TipoProductoes" EntityType="DevelopmentCampModel.TipoProducto" />
+          <AssociationSet Name="FK_ProductoArtista_Artista" Association="DevelopmentCampModel.FK_ProductoArtista_Artista">
+            <End Role="Artista" EntitySet="Artistas" />
+            <End Role="ProductoArtista" EntitySet="ProductoArtistas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Producto_TipoProducto" Association="DevelopmentCampModel.FK_Producto_TipoProducto">
+            <End Role="TipoProducto" EntitySet="TipoProductoes" />
+            <End Role="Producto" EntitySet="Productoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductoArtista_Producto" Association="DevelopmentCampModel.FK_ProductoArtista_Producto">
+            <End Role="Producto" EntitySet="Productoes" />
+            <End Role="ProductoArtista" EntitySet="ProductoArtistas" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Producto">
+          <Key>
+            <PropertyRef Name="IdProducto" />
+          </Key>
+          <Property Name="IdProducto" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IdTipoProducto" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TipoProducto" Relationship="DevelopmentCampModel.FK_Producto_TipoProducto" FromRole="Producto" ToRole="TipoProducto" />
+          <NavigationProperty Name="ProductoArtistas" Relationship="DevelopmentCampModel.FK_ProductoArtista_Producto" FromRole="Producto" ToRole="ProductoArtista" />
+          <Property Name="FechaLanzamiento" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="ProductoArtista">
+          <Key>
+            <PropertyRef Name="IdProductoArtista" />
+          </Key>
+          <Property Name="IdProductoArtista" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idProducto" Type="Int32" Nullable="false" />
+          <Property Name="idArtista" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Artista" Relationship="DevelopmentCampModel.FK_ProductoArtista_Artista" FromRole="ProductoArtista" ToRole="Artista" />
+          <NavigationProperty Name="Producto" Relationship="DevelopmentCampModel.FK_ProductoArtista_Producto" FromRole="ProductoArtista" ToRole="Producto" />
+        </EntityType>
+        <EntityType Name="TipoProducto">
+          <Key>
+            <PropertyRef Name="IdTipoProducto" />
+          </Key>
+          <Property Name="IdTipoProducto" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Productoes" Relationship="DevelopmentCampModel.FK_Producto_TipoProducto" FromRole="TipoProducto" ToRole="Producto" />
+        </EntityType>
+        <Association Name="FK_ProductoArtista_Artista">
+          <End Type="DevelopmentCampModel.Artista" Role="Artista" Multiplicity="1" />
+          <End Type="DevelopmentCampModel.ProductoArtista" Role="ProductoArtista" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Artista">
+              <PropertyRef Name="IdArtista" />
+            </Principal>
+            <Dependent Role="ProductoArtista">
+              <PropertyRef Name="idArtista" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Producto_TipoProducto">
+          <End Type="DevelopmentCampModel.TipoProducto" Role="TipoProducto" Multiplicity="1" />
+          <End Type="DevelopmentCampModel.Producto" Role="Producto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipoProducto">
+              <PropertyRef Name="IdTipoProducto" />
+            </Principal>
+            <Dependent Role="Producto">
+              <PropertyRef Name="IdTipoProducto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductoArtista_Producto">
+          <End Type="DevelopmentCampModel.Producto" Role="Producto" Multiplicity="1" />
+          <End Type="DevelopmentCampModel.ProductoArtista" Role="ProductoArtista" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Producto">
+              <PropertyRef Name="IdProducto" />
+            </Principal>
+            <Dependent Role="ProductoArtista">
+              <PropertyRef Name="idProducto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DevelopmentCampModelStoreContainer" CdmEntityContainer="DevelopmentCampEntities">
+          <EntitySetMapping Name="Artistas">
+            <EntityTypeMapping TypeName="DevelopmentCampModel.Artista">
+              <MappingFragment StoreEntitySet="Artista">
+                <ScalarProperty Name="IdArtista" ColumnName="IdArtista" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Apellido_1" ColumnName="Apellido_1" />
+                <ScalarProperty Name="Edad" ColumnName="Edad" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Productoes">
+            <EntityTypeMapping TypeName="DevelopmentCampModel.Producto">
+              <MappingFragment StoreEntitySet="Producto">
+                <ScalarProperty Name="FechaLanzamiento" ColumnName="FechaLanzamiento" />
+                <ScalarProperty Name="IdTipoProducto" ColumnName="IdTipoProducto" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="IdProducto" ColumnName="IdProducto" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductoArtistas">
+            <EntityTypeMapping TypeName="DevelopmentCampModel.ProductoArtista">
+              <MappingFragment StoreEntitySet="ProductoArtista">
+                <ScalarProperty Name="idArtista" ColumnName="idArtista" />
+                <ScalarProperty Name="idProducto" ColumnName="idProducto" />
+                <ScalarProperty Name="IdProductoArtista" ColumnName="IdProductoArtista" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TipoProductoes">
+            <EntityTypeMapping TypeName="DevelopmentCampModel.TipoProducto">
+              <MappingFragment StoreEntitySet="TipoProducto">
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="IdTipoProducto" ColumnName="IdTipoProducto" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
